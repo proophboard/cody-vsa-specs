@@ -1,0 +1,49 @@
+{
+  "name": "@proophboard/cody-vsa-specs",
+  "version": "0.1.0",
+  "description": "Generate vertical slice specs with a local Cody agent",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsc -P .",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proophboard/cody-vsa-specs.git"
+  },
+  "keywords": [
+    "spec-driven",
+    "prooph-board",
+    "AI"
+  ],
+  "author": "codeliner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/proophboard/cody-vsa-specs/issues"
+  },
+  "homepage": "https://github.com/proophboard/cody-vsa-specs#readme",
+  "devDependencies": {
+    "@types/json-schema": "^7.0.15",
+    "@types/lodash": "^4.17.20",
+    "@types/node": "^24.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.2",
+    "vitest": "^4.0.8"
+  },
+  "dependencies": {
+    "@proophboard/cody-server": "^0.5.1",
+    "@proophboard/cody-types": "^0.5.0",
+    "@proophboard/cody-utils": "^0.3.0",
+    "@rjsf/utils": "^6.0.2",
+    "comment-json": "^4.4.1",
+    "json-schema": "^0.4.0",
+    "lodash": "^4.17.21"
+  }
+}
