@@ -48,7 +48,7 @@ export class ChapterSpec {
     return this.chapterFolder;
   }
 
-  chapterSpecFilePath () {
+  specFilePath () {
     return path.join(this.chapterFolder, 'chapter.spec.json');
   }
 
@@ -59,7 +59,7 @@ export class ChapterSpec {
       _pbLink: this.chapterNode.getLink(),
       name: this.chapterNode.getName(),
       metadata: this.chapterNode.getParsedMetadata(),
-    })
+    }, null, 2)
   }
 
   getPreviousSlice (slice: SliceSpec): SliceSpec | null {

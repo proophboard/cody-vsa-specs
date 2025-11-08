@@ -3,6 +3,9 @@ import type {ChapterSpec} from "./chapter-spec.js";
 import type {NodeRecord} from "../proophboard/node-record.js";
 import {CodyResponseException} from "../utils/error-handling.js";
 import {List} from "immutable";
+import path = require("node:path");
+import {names} from "../utils/names.js";
+import {toJSON} from "../utils/json.js";
 
 export type SliceType = 'user-command' | 'user-view' | 'automation';
 
@@ -53,8 +56,41 @@ export class SliceSpec {
   nextSlice () {
     return this.chapterSpec.getNextSlice(this);
   }
+
   node () {
     return this.sliceNode;
+  }
+
+  folderPath(): string {
+    return path.join(this.chapterSpec.folderPath(), names(this.sliceNode.getName()).fileName);
+  }
+
+  specFilePath(): string {
+    return path.join(this.folderPath(), 'slice.spec.json');
+  }
+
+  toJSON(): string {
+    const prevSlice = this.prevSlice();
+    const nextSlice = this.nextSlice();
+
+    return toJSON({
+      _pbBoardId: this.chapterSpec.boardId(),
+      _pbCardId: this.sliceNode.getId(),
+      _pbLink: this.sliceNode.getLink(),
+      name: this.sliceNode.getName(),
+      type: this.type(),
+      metadata: this.sliceNode.getParsedMetadata(),
+      prevSlice: prevSlice ? {
+        name: prevSlice.name(),
+        _pbCardId: prevSlice.node().getId(),
+        _pbLink: prevSlice.node().getLink()
+      } : null,
+      nextSlice: nextSlice ? {
+        name: nextSlice.name(),
+        _pbCardId: nextSlice.node().getId(),
+        _pbLink: nextSlice.node().getLink()
+      } : null,
+    }, null, 2);
   }
 
   private static detectTypeAndElements (sliceNode: NodeRecord<{}>): {
