@@ -5,14 +5,17 @@ import {CodyResponseException} from "../utils/error-handling.js";
 import {List} from "immutable";
 import path = require("node:path");
 import {names} from "../utils/names.js";
-import {toJSON} from "../utils/json.js";
+import type {VsaContext} from "../vsa-cody-config.js";
+import type {Spec} from "./spec.js";
+import {convertSpecToFileContent} from "../utils/convert-spec-to-file-content.js";
 
 export type SliceType = 'user-command' | 'user-view' | 'automation';
 
-export class SliceSpec {
+export class SliceSpec implements Spec {
   private chapterSpec: ChapterSpec;
   private sliceNode: NodeRecord<{}>;
   private sliceType: SliceType;
+  private ctx: VsaContext;
   private sliceUis: List<NodeRecord<{}>>;
   private sliceCommands: List<NodeRecord<{}>>;
   private sliceBusinessRules: List<NodeRecord<{}>>;
@@ -21,9 +24,10 @@ export class SliceSpec {
   private sliceAutomations: List<NodeRecord<{}>>;
   private sliceServices: List<NodeRecord<{}>>;
 
-  constructor(sliceNode: NodeRecord<{}>, chapterSpec: ChapterSpec) {
+  constructor(sliceNode: NodeRecord<{}>, chapterSpec: ChapterSpec, ctx: VsaContext) {
     this.chapterSpec = chapterSpec;
     this.sliceNode = sliceNode;
+    this.ctx = ctx;
 
     const result = SliceSpec.detectTypeAndElements(sliceNode);
 
@@ -69,11 +73,15 @@ export class SliceSpec {
     return path.join(this.folderPath(), 'slice.spec.json');
   }
 
-  toJSON(): string {
+  toSpecContent () {
+    return convertSpecToFileContent(this, this.ctx);
+  }
+
+  toJSON() {
     const prevSlice = this.prevSlice();
     const nextSlice = this.nextSlice();
 
-    return toJSON({
+    return {
       _pbBoardId: this.chapterSpec.boardId(),
       _pbCardId: this.sliceNode.getId(),
       _pbLink: this.sliceNode.getLink(),
@@ -90,7 +98,7 @@ export class SliceSpec {
         _pbCardId: nextSlice.node().getId(),
         _pbLink: nextSlice.node().getLink()
       } : null,
-    }, null, 2);
+    };
   }
 
   private static detectTypeAndElements (sliceNode: NodeRecord<{}>): {
