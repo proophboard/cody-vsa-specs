@@ -1,4 +1,4 @@
-import {CodyResponseType, NodeType} from "@proophboard/cody-types";
+import {CodyResponseType, type NodeId, NodeType} from "@proophboard/cody-types";
 import {List} from "immutable";
 import {SliceSpec} from "./slice-spec.js";
 import * as path from "node:path";
@@ -15,8 +15,10 @@ export class ChapterSpec implements Spec {
   private slices: List<NodeRecord<{}>>;
   private chapterFolder: string;
   private ctx: VsaContext;
+  private prevChapterId: string | null;
+  private branchedFromChapterId: string | null;
 
-  constructor(node: NodeRecord<{}>, ctx: VsaContext) {
+  constructor(node: NodeRecord<{}>, prevChapterId: string | null, branchedFromChapterId: string | null, ctx: VsaContext) {
     if(node.getType() !== NodeType.boundedContext) {
       throw new CodyResponseException({
         type: CodyResponseType.Error,
@@ -33,6 +35,9 @@ export class ChapterSpec implements Spec {
       .sort((a, b) => {
         return a.getGeometry().x - b.getGeometry().x;
       });
+
+    this.prevChapterId = prevChapterId;
+    this.branchedFromChapterId = branchedFromChapterId;
   }
 
   name () {
@@ -41,6 +46,14 @@ export class ChapterSpec implements Spec {
 
   node () {
     return this.chapterNode;
+  }
+
+  prevChapter (): NodeId | null {
+    return this.prevChapterId
+  }
+
+  branchedFromChapter (): NodeId | null {
+    return this.branchedFromChapterId;
   }
 
   boardId () {
@@ -66,6 +79,8 @@ export class ChapterSpec implements Spec {
       _pbLink: this.chapterNode.getLink(),
       name: this.chapterNode.getName(),
       metadata: this.chapterNode.getParsedMetadata(),
+      prevChapter: this.prevChapterId,
+      branchedFrom: this.branchedFromChapterId,
     };
   }
 
