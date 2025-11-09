@@ -2,15 +2,15 @@
   "name": "@proophboard/cody-vsa-specs",
   "version": "0.1.0",
   "description": "Generate vertical slice specs with a local Cody agent",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
+  "types": "./lib/index.d.ts",
   "type": "module",
+  "bin": {
+    "cody-vsa-specs": "./src/cli.js"
+  },
   "scripts": {
-    "build": "tsc -P .",
+    "build": "rm -rf lib && tsc -P .",
     "test": "vitest"
   },
   "repository": {
@@ -19,7 +19,7 @@
   },
   "keywords": [
     "spec-driven",
-    "prooph-board",
+    "proophboard",
     "AI"
   ],
   "author": "codeliner",
@@ -32,7 +32,6 @@
     "@types/json-schema": "^7.0.15",
     "@types/lodash": "^4.17.20",
     "@types/node": "^24.10.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "vite": "^7.2.2",
     "vitest": "^4.0.8"
@@ -42,8 +41,10 @@
     "@proophboard/cody-types": "^0.5.0",
     "@proophboard/cody-utils": "^0.3.0",
     "@rjsf/utils": "^6.0.2",
+    "commander": "^14.0.2",
     "comment-json": "^4.4.1",
     "json-schema": "^0.4.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "tsx": "^4.20.6"
   }
 }

@@ -3,8 +3,7 @@
   "compilerOptions": {
     // File Layout
     "rootDir": "./src",
-    "outDir": "./dist",
-
+    "outDir": "./lib",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
@@ -36,6 +35,15 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "tests/**/*",
+    "vite.config.ts",
+    "cody.config.ts"
+  ],
+  "paths": {
+    "@proophboard/cody-vsa-specs/*": ["src/*"],
+    "@proophboard/cody-vsa-specs": ["src/index.ts"]
   }
 }

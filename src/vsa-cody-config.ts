@@ -8,6 +8,6 @@ export type VsaContext = CodyConfigCtx & {
   specContentConverter?: SpecContentConverter;
 }
 
-export interface VsaCodyConfig extends CodyConfig {
-  context: VsaContext;
+export interface VsaCodyConfig extends Omit<CodyConfig, 'context'> {
+  context: Partial<VsaContext>;
 }
