@@ -11,12 +11,14 @@ import {CodyResponseException} from "../utils/error-handling.js";
 import * as path from "node:path";
 import {names} from "../utils/names.js";
 import {CommandSchemaSpec} from "./command/command-schema-spec.js";
+import {CommandUiSchemaSpec} from "./command/command-ui-schema-spec.js";
 
 export class CommandSpec implements SpecCollection {
 
   private commandNode: NodeRecord<RawCommandMeta>;
   private commandSlice: SliceSpec;
   private commandSchema: CommandSchemaSpec;
+  private commandUiSchema: CommandUiSchemaSpec;
   private ctx: VsaContext;
 
   constructor(commandNode: NodeRecord<PlayCommandMeta>, commandSlice: SliceSpec, ctx: VsaContext) {
@@ -27,6 +29,7 @@ export class CommandSpec implements SpecCollection {
     const meta = this.metadata();
 
     this.commandSchema = new CommandSchemaSpec(this, meta.schema, ctx);
+    this.commandUiSchema = new CommandUiSchemaSpec(this, meta.uiSchema || {}, ctx);
   }
 
   public name () {
@@ -72,9 +75,14 @@ export class CommandSpec implements SpecCollection {
     return this.commandSchema;
   }
 
+  public uiSchema () {
+    return this.commandUiSchema;
+  }
+
   public specs () {
     return [
       this.commandSchema,
+      this.commandUiSchema,
     ]
   }
 
