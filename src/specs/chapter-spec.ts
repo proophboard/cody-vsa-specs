@@ -93,6 +93,10 @@ export class ChapterSpec implements Spec {
       }
 
       if(currentSlice.getId() === slice.node().getId()) {
+        if(i === 0) {
+          return null;
+        }
+
         const prevSlice =  this.slices.get(i - 1);
 
         return prevSlice ? new SliceSpec(prevSlice, this, this.ctx) : null;

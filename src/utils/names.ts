@@ -1,4 +1,4 @@
-import {camelCase, startCase, snakeCase, kebabCase} from 'lodash';
+import {camelCase, kebabCase, snakeCase, startCase} from "lodash-es";
 
 export type Names = {name: string, className: string, propertyName: string, constantName: string, fileName: string};
 

@@ -12,8 +12,11 @@ import {
 } from '@proophboard/cody-types';
 import {fromJSON} from "../utils/json.js";
 import {names} from "../utils/names.js";
+import {SyncedNodesMap} from "../utils/synced-nodes-map.js";
 
-export interface NodeRecordProps<M extends {service?: string, ns?: string}> {
+export type NodeRecordMetadata = {service?: string, ns?: string};
+
+export interface NodeRecordProps<M extends NodeRecordMetadata> {
   id: NodeId;
   name: NodeName;
   description: NodeDescription;
@@ -28,6 +31,7 @@ export interface NodeRecordProps<M extends {service?: string, ns?: string}> {
   targetsList: List<NodeRecord<M>>;
   geometry: GraphPoint;
   metadata: string | null;
+  nodesMap: SyncedNodesMap;
 }
 
 const defaultNodeRecordProps: NodeRecordProps<any> = {
@@ -45,9 +49,10 @@ const defaultNodeRecordProps: NodeRecordProps<any> = {
   targetsList: List(),
   geometry: { x: 0, y: 0 },
   metadata: null,
+  nodesMap: new SyncedNodesMap(),
 };
 
-export const makeNodeRecord = <M extends {service?: string, ns?: string}>(node: RawNodeRecordProps): NodeRecord<M> => {
+export const makeNodeRecord = <M extends NodeRecordMetadata>(node: RawNodeRecordProps, nodesMap: SyncedNodesMap): NodeRecord<M> => {
   const metadata = parseRawMetadataToJsonIfPossible<{$nodeName?: string, $nodeType?: NodeType}>(node) || {};
 
   return new NodeRecord({
@@ -59,16 +64,43 @@ export const makeNodeRecord = <M extends {service?: string, ns?: string}>(node: 
     tags: List(node.tags),
     layer: node.layer,
     defaultLayer: node.defaultLayer,
-    parent: node.parent ? makeNodeRecord(node.parent) : null,
-    childrenList: List(node.childrenList.map(makeNodeRecord)),
-    sourcesList: List(node.sourcesList.map(makeNodeRecord)),
-    targetsList: List(node.targetsList.map(makeNodeRecord)),
+    parent: node.parent ? makeNodeRecord(node.parent, nodesMap) : null,
+    childrenList: List(node.childrenList.map(n => makeNodeRecord(n, nodesMap))),
+    sourcesList: List(node.sourcesList.map(n => makeNodeRecord(n, nodesMap))),
+    targetsList: List(node.targetsList.map(n => makeNodeRecord(n, nodesMap))),
     geometry: new GraphPointRecord(node.geometry),
     metadata: node.metadata,
+    nodesMap,
   });
 }
 
-export class NodeRecord<M extends {service?: string, ns?: string}> extends Record(defaultNodeRecordProps) implements Node {
+export const makeNodeRecordFromNode = <M extends NodeRecordMetadata>(node: Node, nodesMap: SyncedNodesMap): NodeRecord<M> => {
+  if(node instanceof NodeRecord) {
+    return node;
+  }
+
+  const metadata = parseRawMetadataToJsonIfPossible<{$nodeName?: string, $nodeType?: NodeType}>({"metadata": node.getMetadata()}) || {};
+
+  return new NodeRecord({
+    id: node.getId(),
+    name: metadata.$nodeName || node.getName(),
+    description: node.getDescription(),
+    type: metadata.$nodeType || node.getType(),
+    link: node.getLink() || '',
+    tags: node.getTags(),
+    layer: node.isLayer(),
+    defaultLayer: node.isDefaultLayer(),
+    parent: node.getParent() ? makeNodeRecordFromNode(node.getParent()!, nodesMap) : null,
+    childrenList: node.getChildren().map(n => makeNodeRecordFromNode(n, nodesMap)),
+    sourcesList: node.getSources().map(n => makeNodeRecordFromNode(n, nodesMap)),
+    targetsList: node.getTargets().map(n => makeNodeRecordFromNode(n, nodesMap)),
+    geometry: node.getGeometry(),
+    metadata: node.getMetadata(),
+    nodesMap,
+  });
+}
+
+export class NodeRecord<M extends NodeRecordMetadata> extends Record(defaultNodeRecordProps) implements Node {
 
   private cachedMetadata: M | null | undefined = undefined;
 
@@ -104,20 +136,30 @@ export class NodeRecord<M extends {service?: string, ns?: string}> extends Recor
     return this.defaultLayer;
   }
 
-  public getParent(): Node | null {
-    return this.parent;
+  public getParent<PM extends NodeRecordMetadata>(): NodeRecord<PM> | null {
+    if(!this.parent) {
+      return null;
+    }
+
+    return this.nodesMap.get<PM>(this.parent.getId()) || null;
   }
 
-  public getChildren(): List<NodeRecord<M>> {
-    return this.childrenList;
+  public getChildren<CM extends NodeRecordMetadata>(): List<NodeRecord<CM>> {
+    return this.childrenList
+      .map(n => this.nodesMap.get<CM>(n.getId()))
+      .filter(n => !!n);
   }
 
-  public getSources(): List<NodeRecord<M>> {
-    return this.sourcesList;
+  public getSources<SM extends NodeRecordMetadata>(): List<NodeRecord<SM>> {
+    return this.sourcesList
+      .map(n => this.nodesMap.get<SM>(n.getId()))
+      .filter(n => !!n);
   }
 
-  public getTargets(): List<NodeRecord<M>> {
-    return this.targetsList;
+  public getTargets<TM extends NodeRecordMetadata>(): List<NodeRecord<TM>> {
+    return this.targetsList
+      .map(n => this.nodesMap.get<TM>(n.getId()))
+      .filter(n => !!n);
   }
 
   public getGeometry(): GraphPoint {
@@ -155,15 +197,15 @@ export class NodeRecord<M extends {service?: string, ns?: string}> extends Recor
   }
 
   public withChildren(childrenList: List<Node>): Node {
-    return this.set('childrenList', childrenList as List<NodeRecord<M>>);
+    return this.set('childrenList', childrenList.map(c => makeNodeRecordFromNode(c, this.nodesMap)));
   }
 
   public withSources(sourcesList: List<Node>): Node {
-    return this.set('sourcesList', sourcesList as List<NodeRecord<M>>);
+    return this.set('sourcesList', sourcesList.map(c => makeNodeRecordFromNode(c, this.nodesMap)));
   }
 
   public withTargets(targetsList: List<Node>): Node {
-    return this.set('targetsList', targetsList as List<NodeRecord<M>>);
+    return this.set('targetsList', targetsList.map(c => makeNodeRecordFromNode(c, this.nodesMap)));
   }
 }
 
