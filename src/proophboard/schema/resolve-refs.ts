@@ -1,6 +1,6 @@
 import type {UiSchema} from "@rjsf/utils";
 import type {JSONSchema7} from "json-schema";
-import {playFQCNFromDefinitionId} from "./definition-id.js";
+import {fqcnFromDefinitionId} from "./definition-id.js";
 import {InformationSpec} from "../../specs/information-spec.js";
 import type {VsaContext} from "../../vsa-cody-config.js";
 import {cloneDeep} from "lodash-es";
@@ -30,7 +30,7 @@ export const resolveUiSchema = (schema: JSONSchema7, ctx: VsaContext): UiSchema 
     const isPropRef = isPropertyRef(schema['$ref']);
     const [ref, prop] = isPropRef ? splitPropertyRef(schema['$ref']) : [schema['$ref'], ''];
 
-    const fqcn = playFQCNFromDefinitionId(ref);
+    const fqcn = fqcnFromDefinitionId(ref);
 
     const refNode = ctx.syncedNodes.getTypes()[fqcn];
 

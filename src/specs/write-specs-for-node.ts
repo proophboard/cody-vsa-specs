@@ -20,6 +20,8 @@ export async function writeSpecsForNode (node: NodeRecord<{}>, ctx: VsaContext):
   await writeSpec(slice, ctx, tree);
   await writeSpec(nodeSpec, ctx, tree);
 
+  // @TODO: commandHandler, aggregate, projection
+
   await formatFiles(tree);
 
   const changes = tree.listChanges();

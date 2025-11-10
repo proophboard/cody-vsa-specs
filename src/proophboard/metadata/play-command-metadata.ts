@@ -3,7 +3,6 @@ import {jsonSchemaFromShorthand, type ShorthandObject} from "../schema/json-sche
 import type {UiSchema} from "@rjsf/utils";
 import type {DependencyRegistry} from "../../types/descriptions.js";
 import type {AnyRule} from "../../types/rules.js";
-import type {NodeRecord} from "../node-record.js";
 import type {CodyResponse} from "@proophboard/cody-types";
 import type {VsaContext} from "../../vsa-cody-config.js";
 import {isShorthand} from "../schema/shorthand/shorthand.js";
@@ -20,12 +19,14 @@ export interface RawCommandMeta {
   uiSchema?: UiSchema;
   dependencies?: DependencyRegistry;
   rules?: AnyRule[];
+  persistState?: boolean;
   deleteState?: boolean;
   deleteHistory?: boolean;
   uiDisableFetchState?: boolean;
   streamId?: string;
   streamName?: string;
   publicStream?: string;
+  factory?: AnyRule[];
 }
 
 export interface PlayCommandMeta {
@@ -37,12 +38,14 @@ export interface PlayCommandMeta {
   uiSchema?: UiSchema;
   dependencies?: DependencyRegistry;
   rules?: AnyRule[];
+  persistState?: boolean;
   deleteState?: boolean;
   deleteHistory?: boolean;
   uiDisableFetchState?: boolean;
   streamId?: string;
   streamName?: string;
   publicStream?: string;
+  factory?: AnyRule[];
 }
 
 export const playCommandMetadata = (label: string, FQCN: string, meta: RawCommandMeta | null, ctx: VsaContext): PlayCommandMeta | CodyResponse => {

@@ -1,6 +1,6 @@
 import {makeNodeRecordFromNode, type NodeRecord, type NodeRecordMetadata} from "../proophboard/node-record.js";
 import {type Node, type NodeId, NodeType} from "@proophboard/cody-types";
-
+import {Map} from "immutable";
 export type InformationTypeRegistry = {[typeFQCN: string]: NodeRecord<{}>};
 
 /**
@@ -51,6 +51,10 @@ export class SyncedNodesMap {
     }
 
     return this;
+  }
+
+  public nodeMap (): Map<string, NodeRecord<any>> {
+    return Map(this.nodes);
   }
 
   public clear (): SyncedNodesMap {

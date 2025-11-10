@@ -10,7 +10,7 @@ export const definitionId = (vo: NodeRecord<any>, ctx: VsaContext): string => {
   return `/definitions/${fqcn.split(".").map(p => names(p).fileName).join("/")}`;
 }
 
-export const playFQCNFromDefinitionId = (definitionId: string): string => {
+export const fqcnFromDefinitionId = (definitionId: string): string => {
   const withoutPrefix = definitionId.replace('/definitions/', '');
 
   const fqcnParts = withoutPrefix.split("/");
@@ -35,7 +35,7 @@ export const nodeLabel = (nodeFQCN: string): string => {
   return startCase(parts.pop());
 }
 
-export const playSystemNameFromFQCN = (nodeFQCN: string): string => {
+export const systemNameFromFQCN = (nodeFQCN: string): string => {
   if(nodeFQCN === '') {
     return '';
   }

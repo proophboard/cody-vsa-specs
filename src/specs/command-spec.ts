@@ -12,13 +12,17 @@ import * as path from "node:path";
 import {names} from "../utils/names.js";
 import {CommandSchemaSpec} from "./command/command-schema-spec.js";
 import {CommandUiSchemaSpec} from "./command/command-ui-schema-spec.js";
+import {CommandDescriptionSpec} from "./command/command-description-spec.js";
+import {CommandFactorySpec} from "./command/command-factory-spec.js";
 
 export class CommandSpec implements SpecCollection {
 
   private commandNode: NodeRecord<RawCommandMeta>;
   private commandSlice: SliceSpec;
+  private commandDesc: CommandDescriptionSpec;
   private commandSchema: CommandSchemaSpec;
   private commandUiSchema: CommandUiSchemaSpec;
+  private commandFactory: CommandFactorySpec;
   private ctx: VsaContext;
 
   constructor(commandNode: NodeRecord<PlayCommandMeta>, commandSlice: SliceSpec, ctx: VsaContext) {
@@ -28,8 +32,10 @@ export class CommandSpec implements SpecCollection {
 
     const meta = this.metadata();
 
+    this.commandDesc = new CommandDescriptionSpec(this, ctx);
     this.commandSchema = new CommandSchemaSpec(this, meta.schema, ctx);
     this.commandUiSchema = new CommandUiSchemaSpec(this, meta.uiSchema || {}, ctx);
+    this.commandFactory = new CommandFactorySpec(this, ctx);
   }
 
   public name () {
@@ -40,7 +46,7 @@ export class CommandSpec implements SpecCollection {
     return this.commandNode.getName();
   }
 
-  public description ( ){
+  public cardDescription ( ){
     return this.commandNode.getDescription();
   }
 
@@ -71,6 +77,14 @@ export class CommandSpec implements SpecCollection {
     return path.join(this.commandSlice.folderPath(), 'commands', names(this.commandNode.getName()).fileName);
   }
 
+  public desc () {
+    return this.commandDesc;
+  }
+
+  public factory () {
+    return this.commandFactory;
+  }
+
   public schema () {
     return this.commandSchema;
   }
@@ -81,15 +95,15 @@ export class CommandSpec implements SpecCollection {
 
   public specs () {
     return [
+      this.commandDesc,
       this.commandSchema,
       this.commandUiSchema,
+      this.commandFactory,
     ]
   }
 
 
   /* @TODO: implement spec
-  uiSchema: () => UiSchema;
-  description: () => CommandDescription | AggregateCommandDescription | PureCommandDescription | StreamCommandDescription;
   factoryRules: AnyRule[];
   */
 }

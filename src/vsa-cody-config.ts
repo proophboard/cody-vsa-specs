@@ -11,6 +11,7 @@ export type VsaContext = CodyConfigCtx & {
   syncedNodes: SyncedNodesMap;
   tree: () => Tree;
   defaultSystemName: string;
+  boardId: string;
 }
 
 export interface VsaCodyConfig extends Omit<CodyConfig, 'context'> {

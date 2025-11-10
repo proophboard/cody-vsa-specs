@@ -3,7 +3,7 @@ import type {JSONSchema7} from "json-schema";
 import type {VsaContext} from "../../vsa-cody-config.js";
 import {type CodyResponse, CodyResponseType} from "@proophboard/cody-types";
 import {isJsonSchemaRef as isRefSchema} from "./json-schema/is-json-schema-ref.js";
-import {playFQCNFromDefinitionId} from "./definition-id.js";
+import {fqcnFromDefinitionId} from "./definition-id.js";
 import {splitPropertyRef} from "./resolve-refs.js";
 import {isCodyError} from "@proophboard/cody-utils";
 import {isListSchema} from "./json-schema/is-json-schema-array.js";
@@ -12,7 +12,7 @@ import {isJsonSchemaObject} from "./json-schema/is-json-schema-object.js";
 
 export const ensureAllRefsAreKnown = (node: NodeRecord<any>, schema: JSONSchema7, ctx: VsaContext): boolean | CodyResponse => {
   if(isRefSchema(schema)) {
-    const FQCN = playFQCNFromDefinitionId(splitPropertyRef(schema.$ref)[0]);
+    const FQCN = fqcnFromDefinitionId(splitPropertyRef(schema.$ref)[0]);
 
     if(!ctx.syncedNodes.getTypes()[FQCN]) {
       return {
