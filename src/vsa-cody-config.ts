@@ -10,6 +10,7 @@ export type VsaContext = CodyConfigCtx & {
   specContentConverter?: SpecContentConverter;
   syncedNodes: SyncedNodesMap;
   tree: () => Tree;
+  defaultSystemName: string;
 }
 
 export interface VsaCodyConfig extends Omit<CodyConfig, 'context'> {

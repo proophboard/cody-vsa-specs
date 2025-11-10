@@ -1,6 +1,8 @@
 import {makeNodeRecordFromNode, type NodeRecord, type NodeRecordMetadata} from "../proophboard/node-record.js";
 import {type Node, type NodeId, NodeType} from "@proophboard/cody-types";
 
+export type InformationTypeRegistry = {[typeFQCN: string]: NodeRecord<{}>};
+
 /**
  * Mutable map of synced NodeRecords from prooph board
  *
@@ -10,7 +12,13 @@ import {type Node, type NodeId, NodeType} from "@proophboard/cody-types";
  *
  */
 export class SyncedNodesMap {
+  private defaultSystemName: string;
   private nodes: Record<string, NodeRecord<{}>> = {};
+  private types: Record<string, NodeRecord<{}>> = {};
+
+  constructor(defaultSystemName: string) {
+    this.defaultSystemName = defaultSystemName;
+  }
 
   public get <M extends NodeRecordMetadata>(nodeId: NodeId): NodeRecord<M> | undefined {
     const record = this.nodes[nodeId];
@@ -34,13 +42,25 @@ export class SyncedNodesMap {
       this.set(parent.getId(), addChildIfNotExists(parent, node));
     }
 
-    this.nodes[nodeId] = makeNodeRecordFromNode(node, this);
+    const record = makeNodeRecordFromNode(node, this);
+
+    this.nodes[nodeId] = record;
+
+    if(record.getType() === NodeType.document) {
+      this.types[record.getFullQualifiedName(this.defaultSystemName)] = record;
+    }
+
     return this;
   }
 
   public clear (): SyncedNodesMap {
     this.nodes = {};
+    this.types = {};
     return this;
+  }
+
+  public getTypes (): InformationTypeRegistry {
+    return this.types;
   }
 }
 

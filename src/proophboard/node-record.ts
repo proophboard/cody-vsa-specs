@@ -49,7 +49,7 @@ const defaultNodeRecordProps: NodeRecordProps<any> = {
   targetsList: List(),
   geometry: { x: 0, y: 0 },
   metadata: null,
-  nodesMap: new SyncedNodesMap(),
+  nodesMap: new SyncedNodesMap('App'),
 };
 
 export const makeNodeRecord = <M extends NodeRecordMetadata>(node: RawNodeRecordProps, nodesMap: SyncedNodesMap): NodeRecord<M> => {
@@ -180,7 +180,7 @@ export class NodeRecord<M extends NodeRecordMetadata> extends Record(defaultNode
     return this.cachedMetadata;
   }
 
-  public getFullQualifiedName(): string {
+  public getFullQualifiedName(defaultSystemName: string): string {
     const meta = this.getParsedMetadata();
 
     let fqcn = '';
@@ -193,7 +193,11 @@ export class NodeRecord<M extends NodeRecordMetadata> extends Record(defaultNode
       fqcn += meta.ns + '.';
     }
 
-    return `${fqcn}.${names(this.getName()).className}`;
+    if(fqcn === "") {
+      fqcn = defaultSystemName + '.';
+    }
+
+    return `${fqcn}${names(this.getName()).className}`;
   }
 
   public withChildren(childrenList: List<Node>): Node {
