@@ -48,8 +48,11 @@ Here is a short video demonstrating the steps
 
 ### Not using Node?
 
-No problem! Cody agent writes the specs into JSON files (can also be customized),
-that can be processed in any language. Set up an empty Node.js project and install the agent.
-You can point it to your other project via `cody.config.ts`. Or you run it in a docker container.
+No problem! Cody agent writes the specs into JSON files (by default),
+processable any language. 
 
+Set up an empty Node.js project and install the agent.
+You can point it to your real project via `cody.config.ts`. 
+
+Alternatively, you can run it in a docker container.
 @TODO: Provide a docker image
