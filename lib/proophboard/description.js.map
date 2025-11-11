@@ -1,0 +1,1 @@
+{"version":3,"file":"description.js","sourceRoot":"","sources":["../../src/proophboard/description.ts"],"names":[],"mappings":"AAUA,MAAM,UAAU,MAAM,CAAE,IAAqB,EAAE,GAAe;IAC5D,OAAO;QACL,UAAU,EAAE,GAAG,CAAC,OAAO;QACvB,SAAS,EAAE,IAAI,CAAC,KAAK,EAAE;QACvB,OAAO,EAAE,IAAI,CAAC,OAAO,EAAE;KACxB,CAAA;AACH,CAAC"}

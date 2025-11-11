@@ -4,6 +4,5 @@
 /coverage.data
 /coverage/
 
-# Build files
-/lib
+# test files
 /chapters

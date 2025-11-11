@@ -1,0 +1,1 @@
+{"version":3,"file":"is-json-schema-ref.d.ts","sourceRoot":"","sources":["../../../../src/proophboard/schema/json-schema/is-json-schema-ref.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAC,WAAW,EAAC,MAAM,aAAa,CAAC;AAE7C,MAAM,WAAW,SAAS;IACxB,MAAM,EAAE,MAAM,CAAC;CAChB;AAGD,eAAO,MAAM,eAAe,GAAI,QAAQ,WAAW,KAAG,MAAM,IAAI,SAE/D,CAAA"}

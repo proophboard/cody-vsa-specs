@@ -1,0 +1,1 @@
+{"version":3,"file":"get-chapter-spec.d.ts","sourceRoot":"","sources":["../../../src/specs/inspection/get-chapter-spec.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAC,UAAU,EAAC,MAAM,kCAAkC,CAAC;AACjE,OAAO,KAAK,EAAC,UAAU,EAAC,MAAM,0BAA0B,CAAC;AACzD,OAAO,EAAC,WAAW,EAAC,MAAM,oBAAoB,CAAC;AAI/C,wBAAgB,cAAc,CAAE,IAAI,EAAE,UAAU,CAAC,EAAE,CAAC,EAAE,GAAG,EAAE,UAAU,GAAG,WAAW,CAiBlF"}
