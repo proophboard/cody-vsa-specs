@@ -44,7 +44,7 @@ PORT=3333 npx cody-vsa-specs start
 
 Here is a short video demonstrating the steps
 
-[![Watch the video]([https://i.sstatic.net/Vp2cE.png](https://github.com/proophboard/wiki/blob/main/assets/video/cody-vsa-specs/Intro_Video_Screen.png?raw=true))]([https://youtu.be/vt5fpE0bzSY](https://github.com/proophboard/wiki/raw/refs/heads/main/assets/video/cody-vsa-specs/Cody-VSA-Specs-Intro.mp4)
+[![Watch the video](https://github.com/proophboard/wiki/blob/main/assets/video/cody-vsa-specs/Intro_Video_Screen.png?raw=true)](https://github.com/proophboard/wiki/raw/refs/heads/main/assets/video/cody-vsa-specs/Cody-VSA-Specs-Intro.mp4)
 
 ### Not using Node?
 
