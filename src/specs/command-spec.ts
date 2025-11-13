@@ -1,4 +1,4 @@
-import type {SpecCollection} from "./spec.js";
+import type {Spec, SpecCollection} from "./spec.js";
 import type {NodeRecord} from "../proophboard/node-record.js";
 import {
   type PlayCommandMeta, playCommandMetadata,
@@ -14,6 +14,7 @@ import {CommandSchemaSpec} from "./command/command-schema-spec.js";
 import {CommandUiSchemaSpec} from "./command/command-ui-schema-spec.js";
 import {CommandDescriptionSpec} from "./command/command-description-spec.js";
 import {CommandFactorySpec} from "./command/command-factory-spec.js";
+import {CommandHandlerSpec} from "./command/command-handler-spec.js";
 
 export class CommandSpec implements SpecCollection {
 
@@ -23,6 +24,7 @@ export class CommandSpec implements SpecCollection {
   private commandSchema: CommandSchemaSpec;
   private commandUiSchema: CommandUiSchemaSpec;
   private commandFactory: CommandFactorySpec;
+  private commandHandler: CommandHandlerSpec | null;
   private ctx: VsaContext;
 
   constructor(commandNode: NodeRecord<PlayCommandMeta>, commandSlice: SliceSpec, ctx: VsaContext) {
@@ -36,6 +38,7 @@ export class CommandSpec implements SpecCollection {
     this.commandSchema = new CommandSchemaSpec(this, meta.schema, ctx);
     this.commandUiSchema = new CommandUiSchemaSpec(this, meta.uiSchema || {}, ctx);
     this.commandFactory = new CommandFactorySpec(this, ctx);
+    this.commandHandler = meta.rules ? new CommandHandlerSpec(this, commandSlice, meta.rules, ctx) : null;
   }
 
   public name () {
@@ -93,17 +96,21 @@ export class CommandSpec implements SpecCollection {
     return this.commandUiSchema;
   }
 
+  public handler () {
+    return this.commandHandler;
+  }
+
   public specs () {
-    return [
+    const specs: Spec[] = [
       this.commandDesc,
       this.commandSchema,
       this.commandUiSchema,
-      this.commandFactory,
-    ]
+    ];
+
+    if(this.commandHandler !== null) {
+      specs.push(this.commandHandler);
+    }
+
+    return specs;
   }
-
-
-  /* @TODO: implement spec
-  factoryRules: AnyRule[];
-  */
 }
