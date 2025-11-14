@@ -8,7 +8,7 @@ export type {VsaCodyConfig} from "./vsa-cody-config.js";
 export {SyncedNodesMap} from "./utils/synced-nodes-map.js";
 export {CodyIgnoreAwareTree} from "./utils/fs-tree.js";
 
-const handle = async (node: Node, ctx: VsaContext): Promise<CodyResponse> => {
+export const handleNode = async (node: Node, ctx: VsaContext): Promise<CodyResponse> => {
   try {
     const response = await writeSpecsForNode(makeNodeRecordFromNode(node, ctx.syncedNodes), ctx);
 
@@ -18,7 +18,4 @@ const handle = async (node: Node, ctx: VsaContext): Promise<CodyResponse> => {
   }
 }
 
-export const onCommand: CodyHook<VsaContext> = async (command, ctx) => {
-  return handle(command, ctx);
-}
 

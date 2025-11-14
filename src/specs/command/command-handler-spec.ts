@@ -34,11 +34,11 @@ export class CommandHandlerSpec implements Spec {
   }
 
   folderPath(): string {
-    return path.join(this.handlerSlice.folderPath(), 'commands', names(this.handledCommand.node().getName()).fileName);
+    return this.handledCommand.folderPath();
   }
 
   specFilePath(): string {
-    return "handle.spec.json";
+    return path.join(this.folderPath(), 'handle.spec.json')
   }
 
   toJSON(): object {

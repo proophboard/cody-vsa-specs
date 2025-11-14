@@ -1,4 +1,4 @@
-import type { SpecCollection } from "./spec.js";
+import type { Spec, SpecCollection } from "./spec.js";
 import type { NodeRecord } from "../proophboard/node-record.js";
 import { type PlayCommandMeta, type RawCommandMeta } from "../proophboard/metadata/play-command-metadata.js";
 import type { SliceSpec } from "./slice-spec.js";
@@ -7,6 +7,7 @@ import { CommandSchemaSpec } from "./command/command-schema-spec.js";
 import { CommandUiSchemaSpec } from "./command/command-ui-schema-spec.js";
 import { CommandDescriptionSpec } from "./command/command-description-spec.js";
 import { CommandFactorySpec } from "./command/command-factory-spec.js";
+import { CommandHandlerSpec } from "./command/command-handler-spec.js";
 export declare class CommandSpec implements SpecCollection {
     private commandNode;
     private commandSlice;
@@ -14,6 +15,7 @@ export declare class CommandSpec implements SpecCollection {
     private commandSchema;
     private commandUiSchema;
     private commandFactory;
+    private commandHandler;
     private ctx;
     constructor(commandNode: NodeRecord<PlayCommandMeta>, commandSlice: SliceSpec, ctx: VsaContext);
     name(): string;
@@ -27,6 +29,7 @@ export declare class CommandSpec implements SpecCollection {
     factory(): CommandFactorySpec;
     schema(): CommandSchemaSpec;
     uiSchema(): CommandUiSchemaSpec;
-    specs(): (CommandSchemaSpec | CommandUiSchemaSpec | CommandDescriptionSpec | CommandFactorySpec)[];
+    handler(): CommandHandlerSpec | null;
+    specs(): Spec[];
 }
 //# sourceMappingURL=command-spec.d.ts.map

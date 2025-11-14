@@ -4,6 +4,7 @@ import {CodyResponseType, NodeType} from "@proophboard/cody-types";
 import {CommandSpec} from "./command-spec.js";
 import type {SliceSpec} from "./slice-spec.js";
 import {CodyResponseException} from "../utils/error-handling.js";
+import {EventSpec} from "./event-spec.js";
 
 export interface Spec {
   toJSON: () => object;
@@ -26,6 +27,9 @@ export function makeNodeSpec (node: NodeRecord<any>, slice: SliceSpec, ctx: VsaC
   switch (node.getType()) {
     case NodeType.command:
       return new CommandSpec(node, slice, ctx);
+    case NodeType.event:
+      // @TODO: check if aggregate event!
+      return new EventSpec(node, slice, ctx);
   }
 
   throw new CodyResponseException({

@@ -13,6 +13,10 @@ export class InformationSpec implements SpecCollection {
     }
   }
 
+  public name (): string {
+    return '';
+  }
+
   public schema (): JSONSchema7 {
     return {}
   }
