@@ -113,7 +113,7 @@ export const resolveRefs = (schema: JSONSchema7, ctx: VsaContext, isNested?: boo
 
       return withOriginalTitle(resolvedSchema as JSONSchema7, schema.title);
     }
-    throw new Error(`The reference "${schema['$ref']}" cannot be resolved. It is not listed in types/definitions.ts!`);
+    throw new Error(`The reference "${schema['$ref']}" cannot be resolved. It is not listed in the synced nodes from prooph board!`);
   }
 
   if(schema && schema.properties) {

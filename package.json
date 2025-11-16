@@ -45,6 +45,7 @@
     "@rjsf/utils": "^6.0.2",
     "commander": "^14.0.2",
     "comment-json": "^4.4.1",
+    "compromise": "^14.14.4",
     "json-schema": "^0.4.0",
     "lodash-es": "^4.17.21",
     "tsx": "^4.20.6"

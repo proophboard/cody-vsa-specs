@@ -8,6 +8,7 @@ import {isCodyError} from "@proophboard/cody-utils";
 import {normalizeRefs} from "../schema/normalize-refs.js";
 import {addSchemaTitles} from "../schema/add-schema-titles.js";
 import {definitionIdFromFQCN} from "../schema/definition-id.js";
+import {resolveRefs, resolveUiSchema} from "../schema/resolve-refs.js";
 
 export interface RawEventMeta {
   schema: any;
@@ -46,12 +47,13 @@ export const playEventMetadata = (label: string, FQCN: string, meta: RawEventMet
     schema = normalizeRefs(addSchemaTitles(label, convertedSchema), ctx.defaultSystemName);
   }
 
-  schema['$id'] = definitionIdFromFQCN(FQCN);
+  const resolvedSchema = resolveRefs(schema, ctx);
+  resolvedSchema['$id'] = definitionIdFromFQCN(FQCN);
 
   const parsedMeta: PlayEventMeta = {
     "public": !!meta.public,
     fqcn: FQCN,
-    schema,
+    schema: resolvedSchema,
   }
 
   if(meta.service) {

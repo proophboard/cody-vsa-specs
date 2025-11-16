@@ -44,3 +44,5 @@ export const systemNameFromFQCN = (nodeFQCN: string): string => {
 
   return parts.shift() || '';
 }
+
+

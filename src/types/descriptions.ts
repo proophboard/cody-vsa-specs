@@ -88,7 +88,7 @@ export interface PolicyDescription extends ProophBoardDescription {
   projection?: string;
 }
 
-export interface ValueObjectDescriptionFlags {
+export interface InformationDescriptionFlags {
   isList: boolean;
   hasIdentifier: boolean;
   isQueryable: boolean;
@@ -96,56 +96,56 @@ export interface ValueObjectDescriptionFlags {
   resolve?: {rules?: unknown[]};
 }
 
-export interface ValueObjectDescription extends ProophBoardDescription, ValueObjectDescriptionFlags {
+export interface InformationDescription extends ProophBoardDescription, InformationDescriptionFlags {
   name: string;
   projection?: string;
 }
 
-export interface QueryableDescription extends ValueObjectDescription {
+export interface QueryableDescription extends InformationDescription {
   query: string;
 }
 
-export interface QueryableValueObjectDescription extends QueryableDescription {
+export interface QueryableInformationDescription extends QueryableDescription {
   collection: string;
 }
 
-export const isQueryableDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableDescription => {
+export const isQueryableDescription = (desc: InformationDescriptionFlags): desc is QueryableDescription => {
   return desc.isQueryable;
 }
 
-export const isQueryableValueObjectDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableValueObjectDescription => {
+export const isQueryableInformationDescription = (desc: InformationDescriptionFlags): desc is QueryableInformationDescription => {
   return desc.isQueryable && !desc.hasIdentifier && !desc.isList && !desc.isNotStored;
 }
 
-export interface QueryableNotStoredValueObjectDescription extends ValueObjectDescription {
+export interface QueryableNotStoredInformationDescription extends InformationDescription {
   query: string;
 }
 
-export const isQueryableNotStoredValueObjectDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableNotStoredValueObjectDescription => {
+export const isQueryableNotStoredInformationDescription = (desc: InformationDescriptionFlags): desc is QueryableNotStoredInformationDescription => {
   return desc.isQueryable && !desc.hasIdentifier && !desc.isList && !!desc.isNotStored;
 }
 
-export interface StateDescription extends ValueObjectDescription {
+export interface StateDescription extends InformationDescription {
   identifier: string;
 }
 
-export const isStateDescription = (desc: ValueObjectDescriptionFlags): desc is StateDescription => {
+export const isStateDescription = (desc: InformationDescriptionFlags): desc is StateDescription => {
   return desc.hasIdentifier && !desc.isList;
 }
 
-export interface ListDescription extends ValueObjectDescription {
+export interface ListDescription extends InformationDescription {
   itemType: string;
 }
 
-export const isListDescription = (desc: ValueObjectDescriptionFlags): desc is ListDescription => {
+export const isListDescription = (desc: InformationDescriptionFlags): desc is ListDescription => {
   return desc.isList;
 }
 
-export interface StateListDescription extends ValueObjectDescription{
+export interface StateListDescription extends InformationDescription{
   itemIdentifier: string;
 }
 
-export const isStateListDescription = (desc: ValueObjectDescriptionFlags): desc is StateListDescription => {
+export const isStateListDescription = (desc: InformationDescriptionFlags): desc is StateListDescription => {
   return desc.hasIdentifier && desc.isList;
 }
 
@@ -154,7 +154,7 @@ export interface QueryableStateDescription extends StateDescription {
   collection: string;
 }
 
-export const isQueryableStateDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableStateDescription => {
+export const isQueryableStateDescription = (desc: InformationDescriptionFlags): desc is QueryableStateDescription => {
   return isStateDescription(desc) && desc.isQueryable;
 }
 
@@ -164,7 +164,7 @@ export interface QueryableStateDescriptionWithRules extends QueryableStateDescri
   }
 }
 
-export const isQueryableStateDescriptionWithRules = (desc: ValueObjectDescriptionFlags): desc is QueryableStateDescriptionWithRules => {
+export const isQueryableStateDescriptionWithRules = (desc: InformationDescriptionFlags): desc is QueryableStateDescriptionWithRules => {
   return isQueryableStateDescription(desc) && !!desc.resolve && !!desc.resolve.rules && Array.isArray(desc.resolve.rules);
 }
 
@@ -173,7 +173,7 @@ export interface QueryableNotStoredStateDescription extends StateDescription {
   query: string;
 }
 
-export const isQueryableNotStoredStateDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableNotStoredStateDescription => {
+export const isQueryableNotStoredStateDescription = (desc: InformationDescriptionFlags): desc is QueryableNotStoredStateDescription => {
   return isStateDescription(desc) && desc.isQueryable && !!desc.isNotStored;
 }
 
@@ -182,7 +182,7 @@ export interface QueryableNotStoredStateListDescription extends StateListDescrip
   itemType: string;
 }
 
-export const isQueryableNotStoredStateListDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableNotStoredStateListDescription => {
+export const isQueryableNotStoredStateListDescription = (desc: InformationDescriptionFlags): desc is QueryableNotStoredStateListDescription => {
   return isStateListDescription(desc) && !!desc.isNotStored && desc.isQueryable;
 }
 
@@ -192,35 +192,35 @@ export interface QueryableStateListDescription extends StateListDescription {
   itemType: string;
 }
 
-export const isQueryableStateListDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableStateListDescription => {
+export const isQueryableStateListDescription = (desc: InformationDescriptionFlags): desc is QueryableStateListDescription => {
   return isStateListDescription(desc) && desc.isQueryable && !desc.isNotStored;
 }
 
-export interface QueryableListDescription extends ValueObjectDescription {
+export interface QueryableListDescription extends InformationDescription {
   query: string;
   itemType: string;
 }
 
-export interface StoredQueryableListDescription extends ValueObjectDescription {
+export interface StoredQueryableListDescription extends InformationDescription {
   query: string;
   itemType: string;
   collection: string;
 }
 
-export const isQueryableListDescription = (desc: ValueObjectDescriptionFlags): desc is QueryableListDescription => {
+export const isQueryableListDescription = (desc: InformationDescriptionFlags): desc is QueryableListDescription => {
   return desc.isList && !desc.hasIdentifier && desc.isQueryable;
 }
 
-export const isStoredQueryableListDescription = (desc: ValueObjectDescriptionFlags): desc is StoredQueryableListDescription => {
+export const isStoredQueryableListDescription = (desc: InformationDescriptionFlags): desc is StoredQueryableListDescription => {
   return desc.isList && !desc.hasIdentifier && desc.isQueryable && !desc.isNotStored;
 }
 
-export type ValueObjectDescriptionType = "ValueObjectDescription" | "ListDescription" | "StateDescription" | "StateListDescription"
-  | "QueryableValueObjectDescription" | "QueryableNotStoredValueObjectDescription"
+export type InformationDescriptionType = "InformationDescription" | "ListDescription" | "StateDescription" | "StateListDescription"
+  | "QueryableInformationDescription" | "QueryableNotStoredInformationDescription"
   | "QueryableStateDescription" | "QueryableNotStoredStateDescription" | "QueryableStateListDescription"
   | "QueryableNotStoredStateListDescription" | "QueryableListDescription" | "StoredQueryableListDescription";
 
-export const detectDescriptionType = (desc: ValueObjectDescriptionFlags): ValueObjectDescriptionType => {
+export const detectDescriptionType = (desc: InformationDescriptionFlags): InformationDescriptionType => {
   switch (true) {
     case isQueryableStateListDescription(desc):
       return "QueryableStateListDescription";
@@ -238,13 +238,13 @@ export const detectDescriptionType = (desc: ValueObjectDescriptionFlags): ValueO
       return "StateListDescription";
     case isStateDescription(desc):
       return "StateDescription";
-    case isQueryableValueObjectDescription(desc):
-      return "QueryableValueObjectDescription";
-    case isQueryableNotStoredValueObjectDescription(desc):
-      return "QueryableNotStoredValueObjectDescription";
+    case isQueryableInformationDescription(desc):
+      return "QueryableInformationDescription";
+    case isQueryableNotStoredInformationDescription(desc):
+      return "QueryableNotStoredInformationDescription";
     case isListDescription(desc):
       return "ListDescription";
     default:
-      return "ValueObjectDescription";
+      return "InformationDescription";
   }
 }

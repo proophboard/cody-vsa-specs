@@ -1,11 +1,14 @@
 import type {SpecCollection} from "./spec.js";
 import type {JSONSchema7} from "json-schema";
 import type {UiSchema} from "@rjsf/utils";
-import type {ValueObjectDescriptionFlags} from "../types/descriptions.js";
+import type {InformationDescriptionFlags} from "../types/descriptions.js";
+import type {NodeRecord} from "../proophboard/node-record.js";
 
 export class InformationSpec implements SpecCollection {
 
-  public metadata (): ValueObjectDescriptionFlags {
+  private informationNode: NodeRecord<any>
+
+  public metadata (): InformationDescriptionFlags {
     return {
       isList: false,
       hasIdentifier: false,

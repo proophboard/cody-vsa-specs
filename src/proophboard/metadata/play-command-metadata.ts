@@ -10,6 +10,8 @@ import {isCodyError} from "@proophboard/cody-utils";
 import {normalizeRefs} from "../schema/normalize-refs.js";
 import {addSchemaTitles} from "../schema/add-schema-titles.js";
 import {definitionIdFromFQCN} from "../schema/definition-id.js";
+import {resolveRefs, resolveUiSchema} from "../schema/resolve-refs.js";
+import merge from "lodash/fp/merge.js";
 
 export interface RawCommandMeta {
   schema: JSONSchema7 | ShorthandObject;
@@ -70,7 +72,9 @@ export const playCommandMetadata = (label: string, FQCN: string, meta: RawComman
     schema = normalizeRefs(addSchemaTitles(label, convertedSchema), ctx.defaultSystemName);
   }
 
-  schema['$id'] = definitionIdFromFQCN(FQCN);
+  const resolvedSchema = resolveRefs(schema, ctx);
+  const resolvedUiSchema = resolveUiSchema(schema, ctx);
+  resolvedSchema['$id'] = definitionIdFromFQCN(FQCN);
 
   const aggregateCommand = meta.aggregateCommand || meta.newAggregate || false;
   const streamCommand = !aggregateCommand && !!meta.streamId;
@@ -78,7 +82,8 @@ export const playCommandMetadata = (label: string, FQCN: string, meta: RawComman
 
   return {
     ...meta,
-    schema,
+    schema: resolvedSchema,
+    uiSchema: merge(resolvedUiSchema, meta.uiSchema || {}),
     newAggregate,
     aggregateCommand,
     streamCommand

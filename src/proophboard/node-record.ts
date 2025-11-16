@@ -49,7 +49,7 @@ const defaultNodeRecordProps: NodeRecordProps<any> = {
   targetsList: List(),
   geometry: { x: 0, y: 0 },
   metadata: null,
-  nodesMap: new SyncedNodesMap('App'),
+  nodesMap: null as unknown as SyncedNodesMap,
 };
 
 export const makeNodeRecord = <M extends NodeRecordMetadata>(node: RawNodeRecordProps, nodesMap: SyncedNodesMap): NodeRecord<M> => {

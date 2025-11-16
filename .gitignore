@@ -6,3 +6,6 @@
 
 # test files
 /chapters
+
+# AI assistant files
+/.aiassistant
