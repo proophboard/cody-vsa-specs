@@ -1,6 +1,8 @@
+import {names} from "./names.js";
+
 export const camelCaseToTitle = (str: string): string => {
-  str = str.replace(/([A-Z](?=[A-Z][a-z])|[^A-Z](?=[A-Z])|[a-zA-Z](?=[^a-zA-Z]))/g, '$1 ');
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  str = str.replace(/([A-Z]+)(?=[A-Z][a-z])|([A-Z](?=[A-Z][a-z])|[^A-Z](?=[A-Z])|[a-zA-Z](?=[^a-zA-Z]))/g, '$1$2 ');
+  return str.charAt(0).toUpperCase() + str.slice(1).split(" ").filter(w => w !== "").join(" ");
 }
 
 export const snakeCaseToCamelCase = (str: string): string => {
